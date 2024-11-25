@@ -1,0 +1,125 @@
+body {
+    background: radial-gradient(circle, #1f1972, #1c508b);
+    height: 100vh; 
+    margin: 0; 
+}
+
+.navbar {
+    background-color: #ffffff !important; 
+    box-shadow: 10px 10px 15px rgba(0, 0, 0, 0.5);
+    border-bottom-right-radius: 30px;
+    border-bottom-left-radius: 30px;
+    
+}
+
+.navbar-brand{
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    text-shadow: 2px 2px 5px rgba(146, 139, 139, 0.5);
+    font-style: italic
+}
+.form-label{
+    color: white !important;
+    font-style: italic;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+.btn-primary{
+    color: rgb(255, 255, 255) !important;
+    background-color: orange !important;
+    font-style: italic;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    border-color: white !important;
+    align-items: center !important;
+    display: inline-flex !important;
+}
+.btn-primary:hover{
+    background-color: darkorange !important;
+}
+.img-fluid{
+    box-shadow: 10px 10px 15px rgba(0, 0, 0, 0.5);
+    border-radius: 50%;
+}
+.home{
+    background-color: #1f1972 !important;
+    color: #ffffff !important;
+    font-style: italic;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    border-radius: 50px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+}
+.home:hover{
+    background-color: rgb(141, 130, 185) !important;
+}
+
+
+.input-group{
+    box-shadow: 10px 10px 15px rgba(0, 0, 0, 0.5);
+}
+
+#buscador{
+    font-style: italic;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+/*******  ADMINPAGE  *****/
+.adminpage{
+    background-color: red !important;
+    font-style: italic;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    cursor: pointer;
+    border-radius: 50px !important;
+}
+
+.adminpage:hover{
+    background-color: darkred !important;
+}
+
+#customButton {
+    background-color: #28a745 !important; /* Verde personalizado */
+    font-style: italic !important;
+    font-family: Georgia, 'Times New Roman', Times, serif !important;
+    border: 2px solid white !important; /* Borde blanco */
+    color: white !important; /* Color de texto blanco */
+    align-items: center !important;
+    display: inline-flex !important;
+    padding: 0.375rem 0.75rem !important; /* Añadir padding para mejorar la apariencia */
+    border-radius: 2px !important; /* Redondeado como Bootstrap */
+}
+
+#customButton:hover{
+    background-color: darkgreen !important;
+}
+
+#label-añadir{
+    color: black !important;
+}
+
+.list-group{
+    font-style: italic !important;
+    font-family: Georgia, 'Times New Roman', Times, serif !important;
+    text-align: center;
+    text-decoration: underline !important;
+    cursor: pointer;
+}
+
+#btnActualizar{
+    color: white !important;
+    font-style: italic !important;
+    font-family: Georgia, 'Times New Roman', Times, serif !important;;
+}
+
+#btnEliminar{
+    font-style: italic !important;
+    font-family: Georgia, 'Times New Roman', Times, serif !important;;
+}
+
+#btnGuardar{
+    font-style: italic !important;
+    font-family: Georgia, 'Times New Roman', Times, serif !important;;
+}
+
+#libroModalLabel{
+    font-style: italic !important;
+    font-family: Georgia, 'Times New Roman', Times, serif !important;;
+}

@@ -1,0 +1,253 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="{% static 'fotos/LogoVault.png' %}" type="image/png">
+    <title>Vault-Administración</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/estilos.css' %}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> 
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script> 
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+</head>
+<body>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-8"> 
+                <nav class="navbar bg-body-tertiary" >
+                    <div class="container-fluid">
+                        <a class="navbar-brand" href="{% url 'home' %}">
+                            Vault
+                            <small class="text-body-secondary">- Biblioteca Virtual</small> 
+                        </a>
+                        <ul class="nav nav-pills">
+                            <li class="nav-item">
+                                <a class="nav-link active adminpage" aria-current="page" href="{% url 'home' %}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="20" height="20" class="size-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                                    </svg>
+                                </a>
+                            </li>
+                        </ul>  
+                    </div>        
+                </nav>
+            </div>
+        </div>
+    </div>            
+    <div class="text-center">
+        <img src="{% static 'fotos/LogoVaultR.png' %}" class="img-fluid mt-4" alt="..." width="200" height="200">
+    </div>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-10 text-center">
+                <label for="buscarlibro" class="form-label">Aquí puedes añadir libros o buscarlos para actualizarlos o eliminarlos</label>
+                <form>
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control text-center" id="buscador" placeholder="Buscar..." name="search">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-10 position-relative">
+                <button type="button" id="customButton" class="btn position-absolute" data-bs-toggle="modal" data-bs-target="#libroModal" onclick="prepararModalParaAñadir()">
+                    <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 15v2a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3v-2M12 4v12m0-12 4 4m-4-4L8 8"/>
+                    </svg>
+                    Añadir
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-10">
+                <ul class="list-group mb-5">
+                    {% for libro in libros %}
+                    <li class="list-group-item"  onclick="mostrarDetalles({{ libro.id }})">  <!-- Asegúrate de envolver en comillas -->
+                        <h5>{{ libro.nombre }}</h5>
+                    </li>
+                    {% empty %}
+                        <li class="list-group-item">No hay libros disponibles.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+
+<!-- Modal -->
+<div class="modal fade" id="libroModal" tabindex="-1" aria-labelledby="libroModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="libroModalLabel">Detalles del Libro</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="libroForm" method="post" action="{% url 'actualizar_libro' %}">
+                    {% csrf_token %}
+                    <input type="hidden" id="libro-id" name="id">
+                    <div class="mb-3">
+                        <label for="nombre" id="label-añadir" class="form-label">Nombre</label>
+                        <input type="text" class="form-control" id="nombre" name="nombre" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="autor" id="label-añadir" class="form-label">Autor</label>
+                        <input type="text" class="form-control" id="autor" name="autor" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="categoria" id="label-añadir" class="form-label">Categoría</label>
+                        <input type="text" class="form-control" id="categoria" name="categoria" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="fecha_publicacion" id="label-añadir" class="form-label">Fecha de Publicación</label>
+                        <input type="date" class="form-control" id="fecha_publicacion" name="fecha_publicacion" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="descripcion" id="label-añadir" class="form-label">Descripción</label>
+                        <textarea class="form-control" id="descripcion" name="descripcion" rows="3" required></textarea>
+                    </div>
+                    <!-- Botón de guardar (solo visible al añadir) -->
+                    <button type="submit" id="btnGuardar" class="btn btn-success d-none">Guardar</button>
+                    <!-- Botón de actualizar (solo visible al editar) -->
+                    <button type="submit" id="btnActualizar" class="btn btn-info">Actualizar</button>
+                </form>
+                <!-- Botón de eliminación (solo visible al editar) -->
+                <button id="btnEliminar" class="btn btn-danger mt-3" data-bs-toggle="modal" data-bs-target="#confirmarEliminarModal">Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de confirmación de eliminación -->
+<div class="modal fade" id="confirmarEliminarModal" tabindex="-1" aria-labelledby="confirmarEliminarModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmarEliminarModalLabel">Confirmar Eliminación</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                ¿Estás seguro de que deseas eliminar este libro?
+            </div>
+            <div class="modal-footer">
+                <form id="eliminarForm" method="post" action="{% url 'eliminar_libro' %}">
+                    {% csrf_token %}
+                    <input type="hidden" id="eliminar-libro-id" name="id">
+                    <button type="submit" class="btn btn-danger">Eliminar</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(function() {
+        $("#buscador").autocomplete({
+            source: function(request, response) {
+                $.ajax({
+                    url: "{% url 'buscar_libros' %}",
+                    dataType: "json",
+                    data: {
+                        term: request.term
+                    },
+                    success: function(data) {
+                        response($.map(data, function(item) {
+                            return {
+                                label: item.nombre,
+                                value: item.nombre,
+                                id: item.id
+                            };
+                        }));
+                    }
+                });
+            },
+            minLength: 2,
+            select: function(event, ui) {
+                if (window.location.href.indexOf('adminpage') > -1) {
+                    mostrarDetalles(ui.item.id); // Para adminpage
+                } else {
+                    verDetalles(ui.item.id); // Para home
+                }
+            }
+        });
+    });
+    
+    function verDetalles(libroId) {
+        fetch(`/libro-detalles/${libroId}/`)
+            .then(response => response.json())
+            .then(libro => {
+                if (libro.error) {
+                    console.error('Libro no encontrado');
+                } else {
+                    document.getElementById('modal-nombre').innerText = libro.nombre;
+                    document.getElementById('modal-autor').innerText = libro.autor;
+                    document.getElementById('modal-categoria').innerText = libro.categoria;
+                    document.getElementById('modal-fecha').innerText = libro.fecha_publicacion;
+                    document.getElementById('modal-descripcion').innerText = libro.descripcion;
+                    var myModal = new bootstrap.Modal(document.getElementById('libroModal'));
+                    myModal.show();
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    }
+    
+    function mostrarDetalles(libroId) {
+        fetch(`/libro-detalles/${libroId}/`)
+            .then(response => response.json())
+            .then(libro => {
+                if (libro.error) {
+                    console.error('Libro no encontrado');
+                } else {
+                    document.getElementById('libro-id').value = libroId;
+                    document.getElementById('nombre').value = libro.nombre;
+                    document.getElementById('autor').value = libro.autor;
+                    document.getElementById('categoria').value = libro.categoria;
+                    document.getElementById('fecha_publicacion').value = libro.fecha_publicacion;
+                    document.getElementById('descripcion').value = libro.descripcion;
+                    document.getElementById('libroModalLabel').innerText = 'Actualizar Libro';
+                    document.getElementById('libroForm').action = "{% url 'actualizar_libro' %}";
+                    document.getElementById('eliminar-libro-id').value = libroId;
+    
+                    // Mostrar los botones de Actualizar y Eliminar, ocultar el de Guardar
+                    document.getElementById('btnGuardar').classList.add('d-none');
+                    document.getElementById('btnActualizar').classList.remove('d-none');
+                    document.getElementById('btnEliminar').classList.remove('d-none');
+                    var myModal = new bootstrap.Modal(document.getElementById('libroModal'));
+                    myModal.show();
+                    
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    }
+    
+    function prepararModalParaAñadir() {
+        document.getElementById('libro-id').value = '';
+        document.getElementById('nombre').value = '';
+        document.getElementById('autor').value = '';
+        document.getElementById('categoria').value = '';
+        document.getElementById('fecha_publicacion').value = '';
+        document.getElementById('descripcion').value = '';
+        document.getElementById('libroModalLabel').innerText = 'Añadir Nuevo Libro';
+        document.getElementById('libroForm').action = "{% url 'agregar_libro' %}";
+    
+        // Mostrar el botón de Guardar y ocultar los de Actualizar y Eliminar
+        document.getElementById('btnGuardar').classList.remove('d-none');
+        document.getElementById('btnActualizar').classList.add('d-none');
+        document.getElementById('btnEliminar').classList.add('d-none');
+        var myModal = new bootstrap.Modal(document.getElementById('libroModal'));
+        myModal.show();
+    }
+
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script> 
+</body>
+</html>
